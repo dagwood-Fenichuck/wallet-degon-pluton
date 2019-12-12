@@ -14,13 +14,13 @@
   {
     "settingName": "Tail Local Daemon Log File",
     "location": "node",
-    "description": "Show the log output of your local Wrkzd in the Terminal tab",
+    "description": "Show the log output of your local DeroGoldd in the Terminal tab",
     "keywords": ""
   },
   {
-    "settingName": "Wrkzd Log File Location",
+    "settingName": "DeroGoldd Log File Location",
     "location": "node",
-    "description": "Set the path to the Wrkzd log",
+    "description": "Set the path to the DeroGoldd log",
     "keywords": ""
   },
   {

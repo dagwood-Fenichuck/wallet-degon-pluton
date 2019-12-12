@@ -30,8 +30,8 @@ import Configure from './Configure';
 const homedir = os.homedir();
 
 export const directories = [
-  `${homedir}/.plutonwallet`,
-  `${homedir}/.plutonwallet/logs`
+  `${homedir}/.plutonwallet-dego`,
+  `${homedir}/.plutonwallet-dego/logs`
 ];
 
 export const il8n = new LocalizedStrings({
@@ -64,7 +64,7 @@ updater.getLatestVersion();
 
 export const loginCounter = new LoginCounter();
 
-remote.app.setAppUserModelId('work.wrkz.pluton');
+remote.app.setAppUserModelId('com.derogold.pluton');
 
 log.debug(`Pluton wallet started...`);
 
@@ -277,7 +277,7 @@ ipcRenderer.on('handleSaveAs', () => {
     defaultPath: remote.app.getPath('documents'),
     filters: [
       {
-        name: 'WrkzCoin Wallet File (v0)',
+        name: 'DeroGold Wallet File (v0)',
         extensions: ['wallet']
       }
     ]
@@ -349,7 +349,7 @@ function handleOpen() {
     defaultPath: remote.app.getPath('documents'),
     filters: [
       {
-        name: 'WrkzCoin Wallet File (v0)',
+        name: 'DeroGold Wallet File (v0)',
         extensions: ['wallet']
       }
     ]
@@ -422,7 +422,7 @@ eventEmitter.on('sendNotification', function sendNotification(amount) {
 
   if (notifications) {
     const notif = new window.Notification('Transaction Received!', {
-      body: `${il8n.just_received} ${amount} ${il8n.WRKZ}`
+      body: `${il8n.just_received} ${amount} ${il8n.DEGO}`
     });
     if (notif) {
       log.debug(`Sent notification: You've just received ${amount} {Configure.ticker}.`);
