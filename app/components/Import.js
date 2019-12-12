@@ -63,7 +63,7 @@ export default class Import extends Component<Props, States> {
       defaultPath: remote.app.getPath('documents'),
       filters: [
         {
-          name: 'WrkzCoin Wallet File (v0)',
+          name: 'DeroGold Wallet File (v0)',
           extensions: ['wallet']
         }
       ]

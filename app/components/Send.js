@@ -649,7 +649,7 @@ export default class Send extends Component<Props, State> {
         <Creatable
           multi
           options={this.autoCompleteContacts}
-          placeholder="Enter a WrkzCoin address or a contact name to send funds to"
+          placeholder="Enter a DerooGold address or a contact name to send funds to"
           // eslint-disable-next-line no-unused-vars
           noOptionsMessage={inputValue => null}
           styles={customStyles}
@@ -718,7 +718,7 @@ export default class Send extends Component<Props, State> {
                           placeholder={`How much to send (eg. ${
                             displayCurrency === 'fiat'
                               ? exampleAmount
-                              : '100 WRKZ'
+                              : '100000 DEGO'
                           })`}
                           value={enteredAmount}
                           onChange={this.handleAmountChange}

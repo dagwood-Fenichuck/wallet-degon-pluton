@@ -3,6 +3,7 @@
 //
 // Please see the included LICENSE file for more information.
 import React, { Component } from 'react';
+import Select from 'react-select';
 import { remote } from 'electron';
 import log from 'electron-log';
 import { Daemon } from 'turtlecoin-wallet-backend';
@@ -15,6 +16,8 @@ import {
   startTail
 } from '../index';
 import uiType from '../utils/uitype';
+
+import NodeFee from './NodeFee';
 import Configure from '../Configure';
 
 type Props = {
@@ -26,7 +29,9 @@ type State = {
   nodeChangeInProgress: boolean,
   ssl: boolean,
   useLocalDaemon: boolean,
-  daemonLogPath: string
+  daemonLogPath: string,
+  Selected_Node: string,
+  node_NewFee: number
 };
 
 export default class NodeChanger extends Component<Props, State> {
@@ -38,38 +43,48 @@ export default class NodeChanger extends Component<Props, State> {
     super(props);
     this.daemonInfo =
       session && session.wallet ? session.wallet.getDaemonConnectionInfo() : '';
-
+    this.daemonFee =
+      session && session.wallet ? session.wallet.getNodeFee() : '';
     this.state = {
       connectednode: `${this.daemonInfo.host}:${this.daemonInfo.port}`,
       nodeChangeInProgress: false,
       ssl: this.daemonInfo.ssl,
       useLocalDaemon: config.useLocalDaemon,
-      daemonLogPath: config.daemonLogPath
+      daemonLogPath: config.daemonLogPath,
+      Selected_Node: Configure.defaultDaemon,
+      Fee: this.daemonFee.nodeFeeAmount
     };
     this.changeNode = this.changeNode.bind(this);
     this.handleNodeInputChange = this.handleNodeInputChange.bind(this);
     this.handleNewNode = this.handleNewNode.bind(this);
+    this.handleNodeListChange = this.handleNodeListChange.bind(this);
     this.handleNodeChangeInProgress = this.handleNodeChangeInProgress.bind(
       this
     );
     this.handleNodeChangeComplete = this.handleNodeChangeComplete.bind(this);
     this.toggleLocalDaemon = this.toggleLocalDaemon.bind(this);
-    this.browseForWrkzd = this.browseForWrkzd.bind(this);
+    this.browseForDeroGoldd = this.browseForDeroGoldd.bind(this);
   }
 
   componentWillMount() {
     eventEmitter.on('newNodeConnected', this.handleNewNode);
     eventEmitter.on('nodeChangeInProgress', this.handleNodeChangeInProgress);
     eventEmitter.on('nodeChangeComplete', this.handleNodeChangeComplete);
+    eventEmitter.on('gotNodeFee', this.refreshNodeFee);
   }
 
   componentWillUnmount() {
     eventEmitter.off('newNodeConnected', this.handleNewNode);
     eventEmitter.off('nodeChangeInProgress', this.handleNodeChangeInProgress);
     eventEmitter.off('nodeChangeComplete', this.handleNodeChangeComplete);
+    eventEmitter.off('gotNodeFee', this.refreshNodeFee);
   }
 
-  browseForWrkzd = () => {
+  refreshNodeFee = () => {
+    NodeFee.nodeFee = session.daemon.feeAmount
+  };
+
+  browseForDeroGoldd = () => {
     const options = {
       defaultPath: remote.app.getPath('documents')
     };
@@ -105,26 +120,28 @@ export default class NodeChanger extends Component<Props, State> {
     }
     eventEmitter.emit('nodeChangeInProgress');
     const daemon = new Daemon(host, Number(port));
+    daemon.config = Configure;
     await session.wallet.swapNode(daemon);
     session.daemon = daemon;
     eventEmitter.emit('newNodeConnected');
     const daemonInfo = session.wallet.getDaemonConnectionInfo();
-    log.info(`Connected to ${daemonInfo.host}:${daemonInfo.port}`);
+    log.debug(`Connected to ${daemonInfo.host}:${daemonInfo.port}`);
     session.modifyConfig('daemonHost', daemonInfo.host);
     session.modifyConfig('daemonPort', daemonInfo.port);
-  };
-
-  findNode = () => {
-    remote.shell.openExternal('https://explorer.turtlecoin.lol/nodes.html');
+    eventEmitter.emit('gotNodeFee');
   };
 
   handleNodeInputChange = (event: any) => {
     this.setState({ connectednode: event.target.value.trim() });
   };
 
-  handleNewNode = () => {
-    const daemonInfo = session.wallet.getDaemonConnectionInfo();
+  handleNodeListChange = (selectedOptions, data) => {
+    this.setState({ selectedOptions });
+    this.setState({ connectednode: selectedOptions.label });
+  }
 
+  handleNewNode = async () => {
+    const daemonInfo = session.wallet.getDaemonConnectionInfo();
     this.setState({
       nodeChangeInProgress: false,
       connectednode: `${daemonInfo.host}:${daemonInfo.port}`,
@@ -135,7 +152,8 @@ export default class NodeChanger extends Component<Props, State> {
   handleNodeChangeInProgress = () => {
     this.setState({
       nodeChangeInProgress: true,
-      ssl: undefined
+      ssl: undefined,
+      node_NewFee: undefined
     });
   };
 
@@ -143,8 +161,10 @@ export default class NodeChanger extends Component<Props, State> {
     this.setState({
       nodeChangeInProgress: false,
       connectednode: `${session.daemonHost}:${session.daemonPort}`,
-      ssl: session.daemon.ssl
+      ssl: session.daemon.ssl,
+      node_NewFee: daemonFee.nodeFeeAmount || 0
     });
+    log.debug(`Network Fee ${daemonFee.nodeFeeAmount  || 0}`);
   };
 
   toggleLocalDaemon = () => {
@@ -176,7 +196,9 @@ export default class NodeChanger extends Component<Props, State> {
       connectednode,
       ssl,
       useLocalDaemon,
-      daemonLogPath
+      daemonLogPath,
+	  Selected_Node,
+	  node_NewFee
     } = this.state;
     return (
       <form onSubmit={this.changeNode}>
@@ -216,18 +238,18 @@ export default class NodeChanger extends Component<Props, State> {
                 <i className="fas fa-sync fa-spin" />
               </span>
             )}
-            <p className="help">
-              <a
-                onClick={this.findNode}
-                onKeyPress={this.findNode}
-                role="button"
-                tabIndex={0}
-                className={linkColor}
-                onMouseDown={event => event.preventDefault()}
-              >
-                {il8n.find_node}
-              </a>
-            </p>
+			<br />
+			<br />
+			<p className={`has-text-weight-bold ${textColor}`}>
+			  Select a node:
+			</p>
+			<div style={{width: '350px'}}>
+			<Select
+			  value={this.state.selectedOptions}
+			  onChange={this.handleNodeListChange}
+			  options={session.daemons}
+			/>
+			</div>
           </div>
           {nodeChangeInProgress === true && (
             <div className="control">
@@ -287,7 +309,7 @@ export default class NodeChanger extends Component<Props, State> {
         <br />
         <br />
         <p className={`has-text-weight-bold ${textColor}`}>
-          Wrkzd.log file location:
+          DeroGoldd.log file location:
         </p>
         <div className="field has-addons">
           <div className="control is-expanded">
@@ -301,7 +323,7 @@ export default class NodeChanger extends Component<Props, State> {
           <div className="control">
             <button
               className="button is-warning"
-              onClick={this.browseForWrkzd}
+              onClick={this.browseForDeroGoldd}
             >
               <span className="icon is-small">
                 <i className="fas fa-folder-open" />

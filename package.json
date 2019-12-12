@@ -1,8 +1,8 @@
 {
-  "name": "pluton-wallet",
-  "productName": "Pluton",
-  "version": "1.1.1",
-  "description": "WrkzCoin wallet based on React, React Router, Webpack, and React Hot Loader",
+  "name": "degon-wallet",
+  "productName": "DEGOn",
+  "version": "1.2.0",
+  "description": "DeroGold wallet based on React, React Router, Webpack, and React Hot Loader",
   "scripts": {
     "build": "concurrently \"yarn build-main\" \"yarn build-renderer\"",
     "build-dll": "cross-env NODE_ENV=development webpack --config ./configs/webpack.config.renderer.dev.dll.babel.js --colors",
@@ -46,8 +46,8 @@
   },
   "main": "./app/main.prod.js",
   "build": {
-    "productName": "pluton-wallet",
-    "appId": "work.wrkz.pluton",
+    "productName": "degon-wallet",
+    "appId": "com.derogold.degon",
     "files": [
       "app/dist/",
       "app/app.html",
@@ -92,19 +92,19 @@
     },
     "publish": {
       "provider": "github",
-      "owner": "Wrkz",
+      "owner": "DEGO",
       "repo": "pluton",
       "private": false
     }
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wrkzdev/wrkz-wallet-pluton.git"
+    "url": "git+https://github.com/derogold/dego-wallet-pluton.git"
   },
   "author": {
-    "name": "Wrkz",
-    "email": "team@wrkz.work",
-    "url": "https://github.com/wrkzdev/wrkz-wallet-pluton"
+    "name": "DEGO",
+    "email": "pluton@derogold.com",
+    "url": "https://github.com/derogold/dego-wallet-pluton"
   },
   "contributors": [
     {
@@ -125,14 +125,14 @@
   ],
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/wrkzdev/wrkz-wallet-pluton/issues"
+    "url": "https://github.com/derogold/dego-wallet-pluton/issues"
   },
   "keywords": [
     "turtlecoin",
     "gui wallet",
     "electron",
     "proton",
-    "wrkzcoin",
+    "derogold",
     "pluton"
   ],
   "homepage": "https://github.com/turtlecoin/turtle-wallet-proton#readme",

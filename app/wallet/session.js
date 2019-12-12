@@ -33,8 +33,6 @@ export default class WalletSession {
 
   firstLoadOnLogin: boolean;
 
-  wbConfig: Config;
-
   selectedFiat: string;
 
   daemon: any;
@@ -66,13 +64,6 @@ export default class WalletSession {
     this.walletFile = config.walletFile;
     this.darkMode = config.darkMode || false;
     this.firstLoadOnLogin = true;
-    this.wbConfig = {
-      scanCoinbaseTransactions: config.scanCoinbaseTransactions,
-      customUserAgentString: `${name}-v${version}`,
-      requestTimeout: 1000 * 30,
-      customRequestOptions: { pool: { maxSockets: 100 }, agent: false },
-      blocksPerTick: 1
-    };
 
     this.selectedFiat = config.selectedFiat;
 
@@ -80,7 +71,11 @@ export default class WalletSession {
 
     this.getFiatPrice(this.selectedFiat);
 
+    this.updateNodeList();
+
     this.daemon = new Daemon(this.daemonHost, this.daemonPort);
+
+    this.daemons = [];
 
     if (this.walletFile === '') {
       this.firstStartup = true;
@@ -448,6 +443,40 @@ export default class WalletSession {
     } catch (err) {
       log.debug(`Request failed, CoinGecko API call error: \n`, err);
       return undefined;
+    }
+  };
+
+  updateNodeList = async () => {
+    const apiURL = `${Configure.nodeListURL}`;
+
+    const requestOptions = {
+      method: 'GET',
+      timeout: Configure.requestTimeout,
+      uri: apiURL,
+      headers: {},
+      json: true,
+      gzip: false
+    };
+    try {
+      const result = await request(requestOptions);
+      if (result.nodes) {
+         const activeNodes = [];
+         for (let i = 0; i < result.nodes.length; i++) {
+            if (result.nodes[i].online === true) {
+               activeNodes.push(
+                  {
+                     value: result.nodes[i].url + ':' + result.nodes[i].port.toString(),
+                     label: result.nodes[i].url + ':' + result.nodes[i].port.toString()
+                  });
+            }
+         }
+         log.debug(
+            `Get Total Online nodes: ${result.nodes.length}`
+         );
+         this.daemons = activeNodes;
+      }
+    } catch (err) {
+      log.debug(`Failed to get node list from API: : \n`, err);
     }
   };
 
