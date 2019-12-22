@@ -163,7 +163,7 @@ const Configure = new function() {
      * detailed here: https://docs.turtlepay.io/blockapi/
      */
 
-    this.DefaultDaemonRPCPort = '17856';
+    this.DefaultDaemonRPCPort = '6969';
 
     this.nodeListURL = 'http://dego-nodes.bot.tips/list';
 
@@ -171,7 +171,7 @@ const Configure = new function() {
 
     this.GitHubRepo = 'https://github.com/derogold/dego-wallet-pluton';
 
-    this.DiscordURL = 'https://chat.wrkz.work';
+    this.DiscordURL = 'https://derogold.gq';
 };
 
 export default Configure;

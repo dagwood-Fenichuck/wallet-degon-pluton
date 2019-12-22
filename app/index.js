@@ -30,8 +30,8 @@ import Configure from './Configure';
 const homedir = os.homedir();
 
 export const directories = [
-  `${homedir}/.plutonwallet-dego`,
-  `${homedir}/.plutonwallet-dego/logs`
+  `${homedir}/.plutonwallet`,
+  `${homedir}/.plutonwallet/logs`
 ];
 
 export const il8n = new LocalizedStrings({
