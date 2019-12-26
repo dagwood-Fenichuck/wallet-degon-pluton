@@ -1,7 +1,7 @@
 {
   "name": "degon-wallet",
   "productName": "DEGOn",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "DeroGold wallet based on React, React Router, Webpack, and React Hot Loader",
   "scripts": {
     "build": "concurrently \"yarn build-main\" \"yarn build-renderer\"",

@@ -35,8 +35,8 @@ let config = null;
 const homedir = os.homedir();
 
 const directories = [
-  `${homedir}/.plutonwallet`,
-  `${homedir}/.plutonwallet/logs`
+  `${homedir}/.plutonDegonWallet`,
+  `${homedir}/.plutonDegonWallet/logs`
 ];
 
 const [programDirectory] = directories;
@@ -214,7 +214,7 @@ app.on('ready', async () => {
   }
 
   mainWindow = new BrowserWindow({
-    title: `Pluton v${version}`,
+    title: `Pluton-Degon v${version}`,
     useContentSize: true,
     show: false,
     width: 1250,
