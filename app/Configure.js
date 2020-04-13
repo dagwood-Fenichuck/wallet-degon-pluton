@@ -20,7 +20,7 @@ const Configure = new function() {
     /**
      * How often to save the wallet, in milliseconds
      */
-    this.walletSaveFrequency = 60 * 1000;
+    this.walletSaveFrequency = 120 * 1000;
 
     /**
      * The amount of decimal places your coin has, e.g. TurtleCoin has two
@@ -37,22 +37,22 @@ const Configure = new function() {
     /**
      * Request timeout for daemon operations in milliseconds
      */
-    this.requestTimeout = 30 * 1000;
+    this.requestTimeout = 50 * 1000;
 
     /**
      * The block time of your coin, in seconds
      */
-    this.blockTargetTime = 20;
+    this.blockTargetTime = 300;
 
     /**
      * How often to process blocks, in millseconds
      */
-    this.syncThreadInterval = 10;
+    this.syncThreadInterval = 5;
 
     /**
      * How often to update the daemon info, in milliseconds
      */
-    this.daemonUpdateInterval = 15 * 1000;
+    this.daemonUpdateInterval = 10 * 100;
 
     /**
      * How often to check on locked transactions
@@ -64,7 +64,7 @@ const Configure = new function() {
      * high a value will cause the event loop to be blocked, and your interaction
      * to be laggy.
      */
-    this.blocksPerTick = 100;
+    this.blocksPerTick = 1;
 
     /**
      * Your coins 'ticker', generally used to refer to the coin, i.e. 123 TRTL
@@ -107,14 +107,14 @@ const Configure = new function() {
     this.integratedAddressLength = 97 + ((64 * 11) / 8);
 
     /**
-     * Memory to use for storing downloaded blocks - 32MB
+     * Memory to use for storing downloaded blocks - 256MB
      */
-    this.blockStoreMemoryLimit = 1024 * 1024 * 64;
+    this.blockStoreMemoryLimit = 1024 * 1024 * 256;
 
     /**
      * Amount of blocks to request from the daemon at once
      */
-    this.blocksPerDaemonRequest = 20;
+    this.blocksPerDaemonRequest = 5;
 
     /**
      * User agent string
@@ -171,7 +171,7 @@ const Configure = new function() {
 
     this.GitHubRepo = 'https://github.com/derogold/dego-wallet-pluton';
 
-    this.DiscordURL = 'https://derogold.gq';
+    this.DiscordURL = 'https://derogold.com';
 };
 
 export default Configure;
