@@ -214,7 +214,7 @@ app.on('ready', async () => {
   }
 
   mainWindow = new BrowserWindow({
-    title: `Pluton-Degon v${version}`,
+    title: `Degon v${version}`,
     useContentSize: true,
     show: false,
     width: 1250,
